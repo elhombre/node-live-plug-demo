@@ -1,0 +1,15 @@
+.*
+.yarn/*
+*.code-workspace
+*.lock
+*.log
+*.zip
+dist
+external
+node_modules
+temp
+!.gitignore
+!.gitkeep
+!.husky
+!.pinyarn.js
+!.yarnrc.yml

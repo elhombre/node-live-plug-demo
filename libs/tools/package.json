@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "esbuild": "^0.24.2"
+  },
+  "devDependencies": {
+    "@repo/config": "*",
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2"
+  },
+  "files": [
+    "src/index.d.ts"
+  ],
+  "main": "dist/index.js",
+  "name": "@repo/tools",
+  "packageManager": "yarn@4.5.3",
+  "private": true,
+  "scripts": {
+    "build": "ts-node esbuild.config.ts && cp src/types/index.d.ts dist/",
+    "clean": "rm -rf ./dist"
+  },
+  "type": "commonjs",
+  "types": "dist/index.d.ts",
+  "version": "1.0.0"
+}

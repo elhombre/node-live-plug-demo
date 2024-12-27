@@ -1,0 +1,15 @@
+{
+  "files": [
+    "tsconfig.base.json"
+  ],
+  "main": "tsconfig.base.json",
+  "name": "@repo/config",
+  "packageManager": "yarn@4.5.3",
+  "private": true,
+  "scripts": {
+    "build": "",
+    "clean": ""
+  },
+  "types": "src/index.d.ts",
+  "version": "1.0.0"
+}

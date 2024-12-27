@@ -1,0 +1,9 @@
+{
+  "extends": "@repo/config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "../../../dist",
+    "rootDir": "."
+  },
+  "include": ["src/**/*.ts"]
+}

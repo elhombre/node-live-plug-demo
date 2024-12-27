@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@repo/config": "workspace:^",
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@repo/tools": "*"
+  },
+  "name": "sample-plugin",
+  "packageManager": "yarn@4.5.3",
+  "private": true,
+  "scripts": {
+    "build": "ts-node esbuild.config.ts",
+    "clean": "rm -rf ../../dist/plugins/sample-plugin",
+    "watch": "ts-node esbuild.config.ts --watch"
+  },
+  "type": "commonjs"
+}

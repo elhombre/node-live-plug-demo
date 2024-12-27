@@ -1,0 +1,16 @@
+{
+  "files": [
+    "src/index.d.ts"
+  ],
+  "main": "",
+  "name": "@repo/shared",
+  "packageManager": "yarn@4.5.3",
+  "private": true,
+  "scripts": {
+    "build": "",
+    "clean": ""
+  },
+  "type": "commonjs",
+  "types": "src/index.d.ts",
+  "version": "1.0.0"
+}

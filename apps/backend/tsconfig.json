@@ -1,0 +1,12 @@
+{
+  "extends": "@repo/config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "paths": {
+      "@/shared": ["src/shared"],
+      "@/shared/*": ["src/shared/*"]
+    },
+    "rootDir": "."
+  }
+}
