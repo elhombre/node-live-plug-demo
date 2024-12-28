@@ -11,7 +11,6 @@ import type { AppConfig } from './config/app.config'
 @Injectable()
 export class PluginManagerService implements OnModuleInit {
   private plugins: Map<string, IPlugin> = new Map()
-  private readonly lockedPlugins = new Set<string>()
   private readonly pluginsDir: string
   private readonly pluginEntry = 'plugin.js'
 
@@ -43,7 +42,7 @@ export class PluginManagerService implements OnModuleInit {
     const versions = subDirs
       .filter(d => d.match(/\d+/))
       .map(d => Number.parseInt(d))
-      .sort((a, b) => (a === b ? 0 : a > b ? 1 : -1))
+      .sort((a, b) => a - b)
     const currentVersion = versions.at(-1)
     return currentVersion ? path.join(pluginDir, currentVersion.toString(), this.pluginEntry) : null
   }
@@ -93,6 +92,7 @@ export class PluginManagerService implements OnModuleInit {
   }
 
   private async watchPlugins() {
+    await fs.promises.mkdir(this.pluginsDir, { recursive: true })
     chokidar.watch(this.pluginsDir, { ignoreInitial: true }).on('addDir', async dir => {
       if (/^\d+$/.test(path.basename(dir))) {
         const pluginName = path.basename(path.dirname(dir))

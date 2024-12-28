@@ -48,7 +48,7 @@ export class PluginBuilder {
       const versions = subDirs
         .filter(d => d.match(/\d+/))
         .map(d => Number.parseInt(d))
-        .sort((a, b) => (a === b ? 0 : a > b ? 1 : -1))
+        .sort((a, b) => a - b)
       return (versions.at(-1) ?? 0) + baseVersion
     } catch (_) {
       return baseVersion
