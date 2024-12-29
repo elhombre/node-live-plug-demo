@@ -1,9 +1,9 @@
+import globalConfig from '@/shared/global-config'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import globalConfig from '../shared/global-config'
+import { PluginManagerModule } from '../plugin-manager/plugin-manager.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { PluginManagerService } from './plugin-manager.service'
 
 @Module({
   imports: [
@@ -11,8 +11,9 @@ import { PluginManagerService } from './plugin-manager.service'
       isGlobal: true,
       load: [globalConfig],
     }),
+    PluginManagerModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PluginManagerService],
+  providers: [AppService],
 })
 export class AppModule {}

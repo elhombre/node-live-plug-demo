@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "@repo/config": "workspace:^",
-    "@types/node": "^22.10.2",
-    "ts-node": "^10.9.2"
+    "@repo/shared": "*",
+    "@types/node": "^22.10.2"
   },
   "devDependencies": {
-    "@repo/tools": "*"
+    "@repo/tools": "*",
+    "ts-node": "^10.9.2"
   },
   "name": "sample-plugin",
   "packageManager": "yarn@4.5.3",

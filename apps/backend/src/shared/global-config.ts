@@ -23,7 +23,7 @@ const findConfigFile = (name: string, searchPath: string) => {
   }
   const outerPath = resolve(searchPath, '..')
 
-  if (outerPath.length < 2) {
+  if (outerPath.length < 3) {
     error('FS root reached')
   }
   return findConfigFile(name, outerPath)

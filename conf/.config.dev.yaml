@@ -1,5 +1,7 @@
 # In a real application, this configuration file should not be under Git version control.
 application:
   host: localhost
-  pluginsDir: './dist/plugins'
   port: 3100
+
+plugins:
+  pluginsDir: './dist/plugins'

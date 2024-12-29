@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "chokidar": "^4.0.3",
-    "esbuild": "^0.24.2"
+    "esbuild": "^0.24.2",
+    "ts-json-schema-generator": "^2.3.0"
   },
   "devDependencies": {
     "@repo/config": "*",

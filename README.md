@@ -1,11 +1,15 @@
-
 # Dynamic Plugin Loading in Node.js
+
+## Translations
+- [Русский](README.ru.md)
 
 ## Introduction
 
 Dynamic plugin loading and unloading in Node.js unlocks new possibilities for developers to build modular and extendable applications. This approach allows for adding or updating functionality without restarting the entire application, which is particularly valuable for systems requiring high availability.
 
 This project demonstrates the concept of dynamic plugin management in Node.js. The repository is organized as a monorepo using TurboRepo, with all source code written in TypeScript. The “host” application is built on the NestJS platform, which handles routing requests to plugins. Each plugin is an independent NPM package and can be built using esbuild. Upon each build, a new version of the plugin is created and stored in a separate subdirectory marked with a build number. The application includes a plugin manager that monitors the plugin directories, unloading older versions and loading newer ones as they become available. Notably, plugins maintain compatibility with the debugger even after a new version is loaded.
+
+Additionally, the project supports automatic request data validation for plugins using JSON schemas. These schemas are automatically generated from the plugin's DTO code written in TypeScript. This simplifies data validation and ensures its correctness.
 
 ## Setup and Usage
 
@@ -18,11 +22,27 @@ yarn install
 ```sh
 yarn workspace backend dev
 ```
-After that, you can access the plugin at http://localhost:3100/plugins/sample-plugin/process.
 
 ### Build a Plugin
 ```sh
 yarn workspace sample-plugin build
+```
+
+### Example of a JSON Schema request for a test plugin
+```sh
+curl --location 'localhost:3100/plugins/sample-plugin/schema'
+```
+
+### Example of a request to the functionality of a test plugin
+```sh
+curl --location 'localhost:3100/plugins/sample-plugin/process' \
+--header 'Content-Type: application/json' \
+--data '{
+    "action": "echo",
+    "payload": {
+        "message": "test"
+    }
+}'
 ```
 
 ## Debugging in VSCode
