@@ -37,10 +37,11 @@ export class PluginManagerService implements OnModuleInit {
     })
   }
 
-  public processPlugin(pluginName: string, dto: PluginDtoBase): Promise<string> {
+  public async processPlugin(pluginName: string, dto: PluginDtoBase): Promise<string> {
     return this.withExistingPlugin(pluginName, async plugin => {
       try {
-        return plugin.process(dto)
+        // Note that the use of 'await' is necessary.
+        return await plugin.process(dto)
       } catch (err: unknown) {
         const message = `Cannot execute plugin "${pluginName}": ${(err as Error).message}`
         console.error(message)
@@ -87,14 +88,14 @@ export class PluginManagerService implements OnModuleInit {
       const oldPlugin = this.plugins.get(pluginName)
       if (oldPlugin) {
         action = 'reload'
-        oldPlugin.unload()
+        await oldPlugin.unload()
         this.pluginsDtoValidator.unregisterPlugin(pluginPath)
         console.info('[info] plugin unloaded:', pluginName)
       }
 
       const { default: PluginClass } = require(pluginPath)
       const instance = new PluginClass()
-      instance.load()
+      await instance.load()
       await this.pluginsDtoValidator.registerPlugin(pluginName, pluginDir)
 
       this.plugins.set(pluginName, instance)

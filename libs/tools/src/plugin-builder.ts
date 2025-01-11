@@ -14,7 +14,6 @@ const defaults = {
 
 export class PluginBuilder {
   private readonly entryPoint: string
-  private readonly outputDir: string
   private readonly pluginDir: string
   private readonly pluginName: string
   private readonly sourceDir: string
@@ -26,22 +25,25 @@ export class PluginBuilder {
     this.pluginName = options.pluginName
     this.pluginDir = resolve(projectRoot, options.distDir ?? defaults.distDir, this.pluginName)
     this.sourceDir = resolve(options.baseDir, dirname(pluginEntry))
+  }
 
+  private get outputDir() {
     const currentVersion = this.findCurrentVersion()
-    this.outputDir = join(this.pluginDir, currentVersion.toString())
+    return join(this.pluginDir, currentVersion.toString())
   }
 
   public async build() {
-    fs.mkdirSync(this.outputDir, { recursive: true })
+    const { outputDir: outdir } = this
+    fs.mkdirSync(outdir, { recursive: true })
 
     // Build schema before bundle.
-    await this.buildJsonSchema()
+    await this.buildJsonSchema(outdir)
 
     const ctx = await esbuild.context({
       bundle: this.options.bundleDependencies,
       entryPoints: [this.entryPoint],
       minify: this.options.minify,
-      outdir: this.outputDir,
+      outdir,
       platform: 'node',
       sourcemap: true,
     })
@@ -72,7 +74,7 @@ export class PluginBuilder {
     })
   }
 
-  private async buildJsonSchema() {
+  private async buildJsonSchema(outputDir: string) {
     const { baseDir, dtoPath } = this.options
     if (dtoPath) {
       const config = {
@@ -81,7 +83,7 @@ export class PluginBuilder {
         type: '*',
       } satisfies Config
 
-      const outputPath = join(this.outputDir, defaults.schemaName)
+      const outputPath = join(outputDir, defaults.schemaName)
       const schema = createGenerator(config).createSchema(config.type)
       const schemaString = JSON.stringify(schema, null, 2)
       await fs.promises.writeFile(outputPath, schemaString)

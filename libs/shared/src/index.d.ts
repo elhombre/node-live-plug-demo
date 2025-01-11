@@ -1,7 +1,7 @@
 export interface IPlugin {
-  load(): void
-  process(dto: PluginDtoBase): string
-  unload(): void
+  load(): Promise<void>
+  process(dto: PluginDtoBase): Promise<string>
+  unload(): Promise<void>
 }
 
 export type PluginDtoBase = Readonly<{

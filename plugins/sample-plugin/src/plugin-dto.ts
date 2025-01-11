@@ -3,8 +3,6 @@ export type PluginDto =
   | { action: 'echo'; payload: EchoPayload }
   | { action: 'test'; payload: TestPayload }
 
-export class GetSchemaPayload {}
-
 export type EchoPayload = Readonly<{
   message: string
 }>

@@ -4,15 +4,15 @@ import type { PluginDto } from './plugin-dto'
 export default class Plugin implements IPlugin {
   private version = '0.1'
 
-  public load() {
+  public async load() {
     console.log('sample plugin loaded')
   }
 
-  public unload() {
+  public async unload() {
     console.log('sample plugin unloaded')
   }
 
-  public process(dto: PluginDto): string {
+  public async process(dto: PluginDto): Promise<string> {
     return JSON.stringify({
       description: 'sample plugin',
       response: this.createResponse(dto),
