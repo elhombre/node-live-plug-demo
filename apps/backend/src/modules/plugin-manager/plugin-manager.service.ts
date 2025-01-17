@@ -10,9 +10,15 @@ import type { PluginsConfig } from './config/plugins.config'
 // biome-ignore lint/style/useImportType: <explanation>
 import { PluginsDtoValidator } from './helpers/plugins-dto-validator'
 
+const defaults = {
+  fileWaitTime: 5000,
+}
+
 @Injectable()
 export class PluginManagerService implements OnModuleInit {
   private plugins: Map<string, IPlugin> = new Map()
+
+  private readonly fileWaitTimeMax: number
   private readonly pluginsDir: string
   private readonly pluginEntry = 'plugin.js'
 
@@ -20,8 +26,9 @@ export class PluginManagerService implements OnModuleInit {
     private readonly configService: ConfigService,
     private readonly pluginsDtoValidator: PluginsDtoValidator,
   ) {
-    const { pluginsDir } = this.configService.get('plugins') as PluginsConfig
+    const { fileWaitTime = defaults.fileWaitTime, pluginsDir } = this.configService.get('plugins') as PluginsConfig
     const { rootDir } = this.configService.get('shared') as SharedConfig
+    this.fileWaitTimeMax = fileWaitTime
     this.pluginsDir = path.join(rootDir, pluginsDir)
   }
 
@@ -84,7 +91,9 @@ export class PluginManagerService implements OnModuleInit {
     let action = 'load'
     const pluginPath = path.join(pluginDir, this.pluginEntry)
     try {
-      await this.waitForFile(pluginPath)
+      if (!(await this.waitForFile(pluginPath))) {
+        throw new Error(`file wait time exceeded"`)
+      }
       const oldPlugin = this.plugins.get(pluginName)
       if (oldPlugin) {
         action = 'reload'
@@ -106,18 +115,25 @@ export class PluginManagerService implements OnModuleInit {
     }
   }
 
-  private async waitForFile(filePath: string) {
-    return new Promise<void>(resolve => {
+  private async waitForFile(filePath: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
       console.log('Waiting for file:', filePath)
+      const waitTime = 100
+      let totalWaitTime = 0
       const touch = () => {
         setTimeout(async () => {
           try {
             await fs.promises.access(filePath)
-            resolve()
-          } catch (_) {
-            touch()
+            resolve(true)
+          } catch {
+            totalWaitTime += waitTime
+            if (totalWaitTime > this.fileWaitTimeMax) {
+              resolve(false)
+            } else {
+              touch()
+            }
           }
-        }, 100)
+        }, waitTime)
       }
       touch()
     })
