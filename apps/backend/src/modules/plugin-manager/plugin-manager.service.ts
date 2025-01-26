@@ -62,7 +62,7 @@ export class PluginManagerService implements OnModuleInit {
     let subDirs: Array<string> = []
     try {
       subDirs = fs.readdirSync(pluginDir)
-    } catch (_) {}
+    } catch {}
     const versions = subDirs
       .filter(d => d.match(/\d+/))
       .map(d => Number.parseInt(d))
@@ -75,7 +75,7 @@ export class PluginManagerService implements OnModuleInit {
     let pluginNames = new Array<string>()
     try {
       pluginNames = fs.readdirSync(this.pluginsDir)
-    } catch (_) {}
+    } catch {}
 
     for (const pluginName of pluginNames) {
       const pluginDir = this.getPluginCurrentDir(pluginName)

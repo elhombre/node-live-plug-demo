@@ -33,22 +33,27 @@ export class PluginBuilder {
   }
 
   public async build() {
-    const { outputDir: outdir } = this
+    const { options, outputDir: outdir } = this
     fs.mkdirSync(outdir, { recursive: true })
 
     // Build schema before bundle.
     await this.buildJsonSchema(outdir)
 
     const ctx = await esbuild.context({
-      bundle: this.options.bundleDependencies,
+      bundle: options.bundleDependencies,
       entryPoints: [this.entryPoint],
-      minify: this.options.minify,
+      external: options.external ?? [],
+      minify: options.minify,
       outdir,
       platform: 'node',
       sourcemap: true,
     })
     await ctx.rebuild()
     await ctx.dispose()
+
+    if (options.onAfterBuild) {
+      options.onAfterBuild(outdir)
+    }
   }
 
   public async clean() {
@@ -114,7 +119,7 @@ export class PluginBuilder {
         .filter(d => d.match(/\d+/))
         .map(d => Number.parseInt(d))
         .sort((a, b) => a - b)
-    } catch (_) {
+    } catch {
       return []
     }
   }

@@ -3,7 +3,9 @@ export type PluginBuilderOptions = Readonly<{
   bundleDependencies?: boolean
   distDir?: string // Relative to project root
   dtoPath?: string
+  external?: Array<string>
   minify?: boolean
+  onAfterBuild?: (targetDir: string) => void
   pluginEntry?: string
   pluginName: string
   watchPattern?: RegExp
